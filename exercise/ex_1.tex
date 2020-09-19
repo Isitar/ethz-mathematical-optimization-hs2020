@@ -1,0 +1,212 @@
+\documentclass[12pt, a4]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage{parskip}
+\usepackage{hyperref}
+\usepackage{nameref}
+\usepackage{enumitem}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{fancyhdr}
+\usepackage{titling}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+
+\usetikzlibrary{decorations.pathreplacing}
+
+\author{Pascal Lüscher}
+\title{Mathematical Optimization – Problem set 1}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{
+	\thetitle\\
+	\theauthor
+}
+
+\rfoot{
+	Page: \thepage
+}
+
+\begin{document}
+\paragraph{Problem 1: Graphical solution of a linear program}
+
+\begin{equation*}
+	\begin{array}{lcrcrcr}
+		\text{max} &  &  &  & x_2 &  & \\
+		\text{s.t} & - & 4x_1 & - & x_2 & \leq & -8\\
+		& - & x_1 & + & x_2 & \leq & 3\\
+		&&& - & x_2 & \leq & -2 \\
+		&& 2 x_1 & + & x_2 & \leq & 12 \\
+		&& x_1 &&&\geq&0\\
+		&& &&x_2&\geq&0
+	\end{array}
+\end{equation*}
+
+\newcommand{\lightgray}{black!30}
+\newcommand{\addPlotLDown}[1]{
+	\addplot[mark=none, domain=-1:8, color=\lightgray,
+		decoration={border,segment length=1mm,amplitude=1.5mm,angle=-135},
+		postaction={decorate}
+	] {#1};
+	\addplot[mark=none, domain=-1:8] {#1};
+}
+\newcommand{\addPlotRUp}[1]{
+	\addplot[mark=none, domain=-1:8, color=\lightgray,
+		decoration={border,segment length=1mm,amplitude=1.5mm,angle=135},
+		postaction={decorate}
+	] {#1};
+	\addplot[mark=none, domain=-1:8] {#1};
+}
+
+\subparagraph{a}\label{pg:a} \textit{Determine all optimal solutions graphically.}
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+			axis y line=center,
+			xlabel=$x_1$,
+			ylabel=$x_2$,
+			xmin=-1,
+			ymin=-1,
+			xmax=8,
+			ymax=15,
+			xtick={-1,0,1,2,...,8},
+			ytick={0,2,3,4,6,8,10,12}
+		]
+		
+		\addplot[fill=blue!20,draw=none]coordinates{(1,4)(3,6)(5,2)(1.5,2)};
+
+		\addPlotRUp{-4*x + 8};
+		\addPlotLDown {x+3}
+		\addPlotRUp{2}
+		\addPlotLDown{-2*x+12}
+
+		\addplot[fill=none,draw=blue]coordinates{(1,4)(3,6)(5,2)(1.5,2)};
+		\draw[red, ->](3,6)--(3,9);
+		\node[label={180:{(3,6)}}, circle, fill=red, inner sep=2pt] at (axis cs:3,6) {};
+		
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
+
+\subparagraph{b}\label{pg:b} \textit{Instead of maximizing the objective function, minimize it and graphically determine all optimal
+	solutions of the minimization problem.}
+
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+			axis y line=center,
+			xlabel=$x_1$,
+			ylabel=$x_2$,
+			xmin=-1,
+			ymin=-1,
+			xmax=8,
+			ymax=15,
+			xtick={-1,0,1,2,...,8},
+			ytick={0,2,3,4,6,8,10,12}
+			]
+		
+			\addplot[fill=blue!20,draw=none]coordinates{(1,4)(3,6)(5,2)(1.5,2)};
+			\addPlotRUp{-4*x + 8};
+			\addPlotLDown {x+3}
+			\addPlotRUp{2}
+			\addPlotLDown{-2*x+12}
+		
+			\addplot[fill=none,draw=blue]coordinates{(1,4)(3,6)(5,2)(1.5,2)};
+			\draw[red](1.5,2)--(5,2);
+			\node[label={270:{(1.5,2)}}, circle, fill=red, inner sep=2pt] at (axis cs:1.5,2) {};
+			\node[label={-45:{(5,2)}}, circle, fill=red, inner sep=2pt] at (axis cs:5,2) {};
+			\draw[red, ->](3,2)--(3,1);
+			
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
+
+\subparagraph{c}\label{pg:c} \textit{Change the fourth constraint $2x_1 + x_2 \leq 12$ such that
+\begin{enumerate}[itemindent=30pt,label=(\roman*)]
+	\item the point (5, 2) still satisfies the fourth constraint with equality, and
+	\item the maximization problem becomes unbounded.
+\end{enumerate}
+}
+A simple change would be to make the constraint unnecessary by changing $\leq$ to $\geq$. The maximization problem becomes unbounded since there is always a bigger (better) maximum value ($\infty$).
+
+
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+			axis y line=center,
+			xlabel=$x_1$,
+			ylabel=$x_2$,
+			xmin=-1,
+			ymin=-1,
+			xmax=8,
+			ymax=15,
+			xtick={-1,0,1,2,...,8},
+			ytick={0,2,3,4,6,8,10,12}
+			]
+			
+		\addplot[fill=blue!20,draw=none]coordinates{(1,4)(9,12)(9,2)(1.5,2)};
+
+		\addPlotRUp{-4*x + 8};
+		\addPlotLDown {x+3}
+		\addPlotRUp{2}
+		\addPlotRUp{-2*x+12}
+		
+		\addplot[fill=none,draw=blue]coordinates{(9,12)(1,4)(1.5,2)(9,2)};
+		\draw[red, ->](5,9)--(5,11);
+
+			
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
+
+\subparagraph{d}\label{pg:d} \textit{Change the right-hand side of the fourth constraint $2x_1 + x_2 \leq 12$ (i.e., the number $12$) suchthat the maximization problem becomes infeasible. Is the corresponding minimization probleminfeasible, as well?}
+
+Any value $< 5$ will do, the minimization problem will become infeasible too since there is no solution space.
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+			axis y line=center,
+			xlabel=$x_1$,
+			ylabel=$x_2$,
+			xmin=-1,
+			ymin=-1,
+			xmax=8,
+			ymax=15,
+			xtick={-1,0,1,2,...,8},
+			ytick={0,2,3,4,6,8,10,12}
+			]
+			
+			
+			\addPlotRUp{-4*x + 8}
+			\addPlotLDown{x+3}
+			\addPlotRUp{2}
+			\addPlotLDown{-2*x+4}
+			
+			
+			\draw[red, ->](5,9)--(5,11);
+			
+			
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
+
+
+\subparagraph{e} \textit{Prove that the linear programs that you wrote in parts (c) and (d) are unbounded and infeasible,respectively. How would you prove optimality of the solutions you found in parts (a) and (b)?}
+
+\begin{itemize}
+	\item unbounded: there is no constraint limiting $x_2$ from growing. It can grow infinitly on the constraint $-x_1 + x_2 \leq 3$.
+	\item infeasible: if there is no solution area, there cannot be a solution.
+	\item optimality in a and b: i could use the simplex algorithm and obtain the same solution.
+\end{itemize}
+\end{document}
