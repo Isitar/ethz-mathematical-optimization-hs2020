@@ -93,7 +93,7 @@
 
 
 \author{Pascal Lüscher}
-\title{Mathematik IV: Statistik - Übugnsserie 2}
+\title{Mathematical Optimization – Problem set 2}
 
 \makeatletter
 \let\mytitle\@title
@@ -207,15 +207,19 @@ The optimal objective value is $1.6585$ with $y = \begin{pmatrix}4\\1.65685\end{
 	\caption{Sample polytope with chebychev center}
 \end{figure}
 
-\subsection{Assume that P has a Chebychev center. Write a linear program for the problem of finding sucha Chebyshev center and the radius of the corresponding ball, and prove that your formulation iscorrect. \label{sect:1a}}
+\subsection{Assume that P has a Chebychev center. Write a linear program for the problem of finding such
+a Chebyshev center and the radius of the corresponding ball, and prove that your formulation is
+correct. \label{sect:1a}}
 See Equation \ref{eq:1}
 
-\subsection{Can the linear program that you found in \(\ref{sect:1a}\) help deciding whether a Chebychev center existsat all?}
+\subsection{Can the linear program that you found in \(\ref{sect:1a}\) help deciding whether a Chebychev center exists
+at all?}
 Yes, if there is no Chebychev center at all, the lp becomes unbounded.
 
 \section{Existence of vertices in full-rank polyhedra}
 Let $A \in \mathbb{R}^{m \times n}$ have full column rank, let $b \in R^m$ , and consider the polyhedron ${P = \{x \in \mathbb{R}^n : Ax \leq b\}}$
-\subsection{For $v, w \in \mathbb{R}^n$ with $w \neq 0$, the set $L(v, w) := \{v + \lambda w : \lambda \in \mathbb{R}\}$ is called a line. Prove that $P$ doesnot contain a line, i.e., there are no $v, w \in \mathbb{R}^n$ with $w \neq 0$ such that $L(v, w) \subseteq P$.}
+\subsection{For $v, w \in \mathbb{R}^n$ with $w \neq 0$, the set $L(v, w) := \{v + \lambda w : \lambda \in \mathbb{R}\}$ is called a line. Prove that $P$ does
+not contain a line, i.e., there are no $v, w \in \mathbb{R}^n$ with $w \neq 0$ such that $L(v, w) \subseteq P$.}
 
 Informal: The Polyhedron is constrained in all variables (because it is a full column rank constrained polyhedron). So there is no possible line since $\lambda$ can be chosen to violate a constraint.
 
