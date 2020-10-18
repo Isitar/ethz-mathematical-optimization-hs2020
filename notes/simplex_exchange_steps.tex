@@ -1,0 +1,118 @@
+\documentclass[12pt, a4]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage{parskip}
+\usepackage{nameref}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage[tiny]{titlesec}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{fancyhdr}
+\usepackage{titling}
+\usepackage[]{hyperref}
+\usepackage[nameinlink]{cleveref}
+
+\author{Pascal Lüscher}
+\title{Simplex tableau exchange steps}
+
+\makeatletter
+\let\mytitle\@title
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{
+	\mytitle\\
+	\theauthor
+}
+
+\rfoot{
+	Page: \thepage
+}
+
+\renewcommand{\arraystretch}{1.2} % more space in tables
+\renewcommand\thesubsection{\thesection.\alph{subsection}}
+
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\newcolumntype{R}{>{$}r<{$}} % math-mode version of "r" column type
+\newcolumntype{C}{>{$}c<{$}} % math-mode version of "c" column type
+
+\begin{document}
+	\section{Short tableau from canonical form}
+	Given the an lp in canonical form like \cref{eq:lp} the short tableau is created simply reading the values. The Equation \cref{eq:example_lp} is an example which is transformed into the short tableau in \cref{tab:short_tableau_example_lp}.
+	
+\begin{minipage}[t]{.5\textwidth}
+	\begin{equation}{\label{eq:lp}}
+		\begin{matrix*}[r]
+			\text{max} & c^\top x \\
+			\text{s.t.} & Ax & \leq & b \\
+			& x & \in& \mathbb{R}_{\geq 0}
+		\end{matrix*}
+	\end{equation}
+\end{minipage}
+%
+\begin{minipage}[t]{.5\textwidth}
+	\begin{equation}{\label{eq:example_lp}}
+		\begin{matrix*}[r]
+			\text{max} & & x_1 &+& x_2 \\
+			\text{s.t.}& & x_1 & &     & \leq & 4 \\
+			           & &     & & x_2 & \leq & 4 \\
+			           & & x_1 &+& x_2 & \leq & 7 \\
+			           &-& x_1 &-& x_2 & \leq &-3 \\		           
+	          		   & & x_1 &,& x_2     &  \in & \mathbb{R}_{\geq 0} \\
+		\end{matrix*}
+	\end{equation}
+\end{minipage}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{L|RR||R}
+		& x_1 & x_2 & 1 \\
+		\hline
+		z & -1 & -1 & 0 \\
+		\hline
+		y_1 & 1 & 0 & 4 \\
+		y_2 & 0 & 1 & 4 \\
+		y_3 & 1 & 0 & 4 \\
+		y_4 & 1 & 1 & 7 \\
+		y_5 &-1 &-1 &-3 \\
+	\end{tabular}
+	\caption{Short tableau for \cref{eq:example_lp}}
+	\label{tab:short_tableau_example_lp}
+\end{table}
+
+\section{Exchange step rules for short tableau}
+We pivot on the element $A_{p_rp_c}$.
+
+Pivot element
+\begin{equation}{\label{eq:pivot_element}}
+	A'_{p_rp_c} = \frac{1}{A_{p_rp_c}}
+\end{equation}
+
+Pivot row
+\begin{equation}{\label{eq:pivot_row}}
+	A'_{p_rc} = \frac{A_{p_rc}}{A_{p_rp_c}}
+\end{equation}
+
+Pivot column
+\begin{equation}{\label{eq:pivot_column}}
+	A'_{rp_c} = -\frac{A_{rp_c}}{A_{p_rp_c}}
+\end{equation}
+
+other A
+\begin{equation}{\label{eq:other_a}}
+	A'_{rc} = A_{rc} - \frac{A_{rp_c}A_{p_rc}}{A_{p_rp_c}}
+\end{equation}
+
+pivot row b
+\begin{equation}{\label{eq:pivot_b}}
+	b'_{p_r} = \frac{b_{p_r}}{A_{p_rp_c}}
+\end{equation}
+other  b
+\begin{equation}{\label{eq:other_b}}
+	b'_{r} = b_r - \frac{A_{rp_c} b_{p_r}}{A_{p_rp_c}}
+\end{equation}
+
+\end{document}
