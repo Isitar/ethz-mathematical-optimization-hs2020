@@ -248,16 +248,40 @@ Sorted array $A = [1,2,3,4]$
 \section{Problem 4: Quering edge existence in incidence lists}
 Let $G= (V, E)$ be a graph given by an incidence list and let $u, v\in V$ two vertices. Show that in time $O(\min\{deg(u),deg(v)\})$, it can be decided whether $G$ contains an edge $\{u, v\}$.
 
-The edge $\{u,v\}$ is contained in the list for $u$ and in the list for $v$. Therefore the shorter list can be queried. Implement the incidence list in a datastructure where you know the length of it (in $O(1)$ time).
+The edge $\{u,v\}$ is contained in the list for $u$ and in the list for $v$. An algorithm with running time of $O(2\cdot\min\{deg(u),deg(v)\})$ woks as the following:
+\pagebreak
+\begin{lstlisting}
+ContainsEdge(u, v) {
+	var currentUEdge = u.FirstEdge;
+	var currentVEdge = v.FirstEdge;
+	while(true) {
+		if (currentUEdge.Start == v || currentUEdge.End == v) {
+			return true;
+			if (!currentUEdge.Next()) {
+				return false;
+			}
+			currentUEdge = currentUEdge.Next();
+		}
+		if (currentVEdge.Start == u || currentVEdge.End == u) {
+			return true;
+			if (!currentVEdge.Next()) {
+				return false;
+			}
+			currentVEdge = currentVEdge.Next();
+		}
+	}
+}
+	
+\end{lstlisting}
 
+\pagebreak
 \section{Problem 5: Meeting at a central point}
 Imagine three caterpillars sitting on vertices $v1,v2,$ and $v3$ of a connected graph $G= (V, E)$. The three caterpillars would like to meet at one of the vertices of the graph. All they can do is moving from one vertex to another via the edges of the graph, and they can only stop at vertices of the graph,but not on an edge. When traversing an edge, the three caterpillars travel at the same speed of one edge per hour.
 
- For an example, consider Figure \ref{fig:graph_caterpillar}. To meet at vertex $v5$, the caterpillar from vertex $v1$ could travel to $v5$ via the vertices $v4$ and $v2$ in three hours (and there is no faster option), and the caterpillars from $v2$ and $v3$ could be there in one and two hours, respectively. Thus, an earliest meeting at $v5$ could take place three hours after the caterpillars start moving.
+ For an example, consider \autoref{fig:graph_caterpillar}. To meet at vertex $v5$, the caterpillar from vertex $v1$ could travel to $v5$ via the vertices $v4$ and $v2$ in three hours (and there is no faster option), and the caterpillars from $v2$ and $v3$ could be there in one and two hours, respectively. Thus, an earliest meeting at $v5$ could take place three hours after the caterpillars start moving.
  
  \begin{figure}[h]
  	\centering
- 	\label{fig:graph_caterpillar}
  	\begin{tikzpicture}
  		\begin{scope}[every node/.style={circle,thick,draw}]
  			\node[fill=lightgray] (v1) at (0,0) {$v_1$};
@@ -279,8 +303,9 @@ Imagine three caterpillars sitting on vertices $v1,v2,$ and $v3$ of a connected 
 			\path (v3) edge (v9);
 	 	\end{scope}
 	\end{tikzpicture}
-\caption{A graph $G= (V, E)$ with starting points of the caterpillars marked in gray.}
- 	\end{figure}
+	\caption{A graph $G= (V, E)$ with starting points of the caterpillars marked in gray.}
+	\label{fig:graph_caterpillar}
+\end{figure}
  
  Of course, the caterpillars want to meet at a vertex where an earliest possible meeting can be achieved. Can you provide an algorithm that determines such a vertex?  Analyze the running time of your algorithm. Is it possible to construct an algorithm that solves the given problem and has running time $O(|V|+|E|)$?
  
@@ -300,10 +325,9 @@ and \emph{caterpillars} is an array of the class \emph{Caterpillar} given as the
 	}
 \end{lstlisting}
 
- 
- \pagebreak
- \begin{lstlisting}[language={[Sharp]c}] 		
- 	// set the starting position
+\pagebreak
+ Algorithm:
+ \begin{lstlisting}[language={[Sharp]c}] 
 	var latestCaterpillarVertices = new Vertex[caterpillars.Count][]
  	for (var i = 0; i < caterpillars.Count; ++i) {
  		latestCaterpillarVertices[i] = new [] {caterpillars[i].StartingVertex};
@@ -337,6 +361,8 @@ and \emph{caterpillars} is an array of the class \emph{Caterpillar} given as the
 		}
 	}
  \end{lstlisting}
+
+The running time is $O(\#caterpillars \cdot (|V| + |E|))$
 
 
 \end{document}
