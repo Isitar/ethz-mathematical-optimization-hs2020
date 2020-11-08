@@ -804,9 +804,12 @@ With the same argument, the inflow for $t$ has to equal the value of $\nu$.
 \subsection{Write down the dual of the linear program \autoref{eq:prob3_lp}, using variables $y_v$ for $v\in V$ and $z_a$ for $a\in A$.}
 
 \begin{equation}
-	\begin{array}{llrcl}
-		\min & \sum_{a\in A} u_a z_a  \\
-		\text{s.t.} 
+	\begin{array}{lccccccl}
+		\min & \multicolumn{6}{l}{\sum_{a\in A} u_a z_a}  \\
+		\text{s.t.} & y_t & - & y_s &   &     & \geq & 1 \\
+					& y_v & - & y_w & + & z_a & \geq & 0 \\
+					&     &   &     &   & y_v & \in  & \mathbb{R} \quad \forall v \in V \\
+					&     &   &     &   & z_a & \in  & \mathbb{R}_{\geq0} \quad \forall a \in A \\
 	\end{array}
 	\label{eq:prob3_lp}
 \end{equation}
