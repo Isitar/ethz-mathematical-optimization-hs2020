@@ -1,0 +1,167 @@
+\documentclass[12pt, a4]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage{parskip}
+\usepackage{nameref}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage[tiny]{titlesec}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage[weather]{ifsym}
+
+\usepackage{fancyhdr}
+\usepackage{titling}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usetikzlibrary{decorations.pathreplacing,positioning, shapes,arrows,chains,graphs,calc}
+
+
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{listings}
+\usepackage{bm}
+\usepackage{xcolor}
+\usepackage{optidef}
+
+\usepackage{pifont} % for cmark and xmark
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+\newcommand{\checkedbox}{\rlap{$\square$}{\raisebox{2pt}{\hspace{1pt}\cmark}}}
+%\newcommand{\crossedBox}{\rlap{$\square$}{\large\hspace{1pt}\xmark}}
+
+
+\xdefinecolor{gray}{rgb}{0.4,0.4,0.4}
+\xdefinecolor{blue}{RGB}{58,95,205}
+\xdefinecolor{darkgreen}{RGB}{0,100,0}
+
+\newcommand{\lightgray}{black!30}
+
+\newcommand{\plotDomain}{-1:8}
+
+\newcommand{\addPlotLDownCoords}[1]{
+	\addplot[mark=none, domain=\plotDomain, color=\lightgray,
+	decoration={border,segment length=1mm,amplitude=1.5mm,angle=-135},
+	postaction={decorate}
+	] coordinates {#1};
+	\addplot[mark=none, domain=\plotDomain] coordinates {#1};
+}
+
+\newcommand{\addPlotLDown}[1]{
+	\addplot[mark=none, domain=\plotDomain, color=\lightgray,
+	decoration={border,segment length=1mm,amplitude=1.5mm,angle=-135},
+	postaction={decorate}
+	] {#1};
+	\addplot[mark=none, domain=\plotDomain] {#1};
+}
+
+\newcommand{\addPlotRUpCoords}[1]{
+	\addplot[mark=none, domain=\plotDomain, color=\lightgray,
+	decoration={border,segment length=1mm,amplitude=1.5mm,angle=135},
+	postaction={decorate}
+	] coordinates {#1};
+	\addplot[mark=none, domain=\plotDomain] coordinates {#1};
+}
+
+\newcommand{\addPlotRUp}[1]{
+	\addplot[mark=none, domain=\plotDomain, color=\lightgray,
+	decoration={border,segment length=1mm,amplitude=1.5mm,angle=135},
+	postaction={decorate}
+	] {#1};
+	\addplot[mark=none, domain=\plotDomain] {#1};
+}
+
+\lstset{% setup listings
+	language=R,% set programming language
+	basicstyle=\ttfamily\small,% basic font style
+	keywordstyle=\color{blue},% keyword style
+	commentstyle=\color{gray},% comment style
+	numbers=left,% display line numbers on the left side
+	numberstyle=\scriptsize,% use small line numbers
+	numbersep=10pt,% space between line numbers and code
+	tabsize=3,% sizes of tabs
+	showstringspaces=false,% do not replace spaces in strings by a certain character
+	captionpos=b,% positioning of the caption below
+	breaklines=true,% automatic line breaking
+	escapeinside={(*}{*)},% escaping to LaTeX
+	fancyvrb=true,% verbatim code is typset by listings
+	extendedchars=false,% prohibit extended chars (chars of codes 128--255)
+	literate={"}{{\texttt{"}}}1{<-}{{$\bm\leftarrow$}}1{<<-}{{$\bm\twoheadleftarrow$}}1
+	{~}{{$\bm\sim$}}1{<=}{{$\bm\le$}}1{>=}{{$\bm\ge$}}1{!=}{{$\bm\neq$}}1{^}{{$^{\bm\wedge}$}}1,% item to replace, text, length of chars
+	alsoletter={.<-},% becomes a letter
+	alsoother={$},% becomes other
+	otherkeywords={!=, ~, $, \&, \%/\%, \%*\%, \%\%, <-, <<-, /},% other keywords
+	deletekeywords={c}% remove keywords
+}
+
+
+
+\author{Pascal Lüscher}
+\title{Mathematical Optimization – Problem set 11}
+
+\makeatletter
+\let\mytitle\@title
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{
+	\mytitle\\
+	\theauthor
+}
+
+\rfoot{
+	Page: \thepage
+}
+
+\renewcommand{\arraystretch}{1.2} % more space in tables
+\renewcommand\thesubsection{\thesection.\alph{subsection}}
+\titleformat{\section}[hang]{\normalfont\bfseries\itshape}{\textup{\thesubsection}}{1em}{}
+
+\titleformat{\subsection}[hang]{\normalsize\itshape}{\textup{\thesubsection}}{1em}{}[]
+
+\newcommand{\norm}[1]{\lvert #1 \rvert}
+
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\newcolumntype{R}{>{$}r<{$}} % math-mode version of "l" column type
+\newcolumntype{C}{>{$}c<{$}} % math-mode version of "l" column type
+
+\begin{document}
+\section{Problem 3: Perfect matchings in three-regular graphs}
+Prove that every 3-regular bridgeless graph admits a perfect matching. To this end, recall that a \emph{bridge} in a graph $G=(V,E)$ is an edge $e\in E$ whose removeal from the graph increases the number of connected components by one. A graph is \emph{bridgeless} if it contains no bridge. Moreover, a graph is $3$-\emph{regular} if the degree of every vertex is three.
+\paragraph{Solution}
+We show that the perfect matching polytope is non-empty. The perfect matching polytope is defined by $P(G) = \left \{ x\in R^E_{\geq 0} \left|\begin{matrix}
+	x(\delta(v)) = 1 & \forall v \in V \\ 
+	x(\delta(S)) \geq 1 & \forall S \subseteq V,& |S|\text{ odd}
+\end{matrix}\right. \right\}$. 
+
+Wlog we assume the graph is connected.
+
+Let $x$ be the all $\frac{1}{3}$-vector. We need to show that $x$ is in the polytope $P$.
+To be in the polytope, all constraints must be satisfied.
+
+\subparagraph{$\bm{x(\delta(v)) = 1 \quad \forall v \in V}$:}
+This constraint is satisfied by the construction of $x$. In a $3$-regular graph, every vertex has $3$ edges and therefore the sum of all outgoing edges is equal to $=1$.
+
+\subparagraph{$\bm{x(\delta(S)) \geq 1 \quad \forall S \subseteq V, |S|\text{ odd}}$:}
+To fulfill this constraint there need to be 3 outgoing edges for every subset $S$.
+By sake of contradiction we assume there are 0, 1, or 2 outgoing edges. By disproving all of them, there are at least 3 outgoing edges.
+
+Case  $0$:
+In the lecture we showed that there is no perfect matching in a Graph with odd number of vertices. Since we assumed that $x$ is in $P$ this case will never happen. \Lightning
+
+Case $1$:
+If there exists only one edge outgoing of S, that edge becomes a bridge. By definition $G$ is bridgeless. \Lightning
+
+Case $2$:
+If we sum up all the vertices in $G$ we get $3\cdot|V|$. Expressed with respect to $S$ we can also say we have $2\cdot e +2 \quad  \forall e\in S$. But $3\cdot|V|$ is odd and $2\cdot e +2$ is even. \Lightning
+
+Therefore the number of outgoing edges have to be at least $3$ which fulfills the constraint.
+
+
+\end{document}
